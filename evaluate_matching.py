@@ -58,13 +58,13 @@ def load_pairs_evaluate(pairs_file_name, y_file_name):
 
     evaluate_accuracy_for_embeddings(pairs, y)
 
-def _test():
-    from preprocssing import _create_pairs
-    _create_pairs()
+def main():
+    from preprocssing import create_pairs
+    create_pairs() #provide path to pickle files (otherwise will use provided input data)
     path = os.path.dirname(os.path.abspath(__file__))  + '/'
-    load_pairs_evaluate(path + 'data/triplets.pickle', path + 'data/triplets_y.pickle')
+    load_pairs_evaluate(path + 'data/pairs.pickle', path + 'data/pairs_y.pickle')
 
 
 
 if __name__ == '__main__':
-    _test()
+    main()

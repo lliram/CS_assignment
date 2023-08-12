@@ -8,10 +8,11 @@ from definitions import TaskType
 import numpy as np
 
 
-def load_data():
+def load_data(img_embeddings_path='data/image_embeddings.pickle',
+              aud_embeddings_path='data/audio_embeddings.pickle'):
 
     #Load pickle files
-    img_feat_dic, aud_feat_dic = load_files()
+    img_feat_dic, aud_feat_dic = load_files(img_embeddings_path, aud_embeddings_path)
 
     #extract persons names and the embedding vector
     img_names, img_vecs = extract_name_vec(img_feat_dic)
@@ -25,14 +26,15 @@ def load_data():
              np.array(aud_vecs, dtype=np.float64), np.array(aud_labels), num_labels)
 
 
-def load_files():
+def load_files(img_embeddings_path='data/image_embeddings.pickle',
+               aud_embeddings_path='data/audio_embeddings.pickle'):
     """
     Loads the embeddings from the pickle files
     """
-    with open('data/image_embeddings.pickle', 'rb') as f:
+    with open(img_embeddings_path, 'rb') as f:
         img_feat_dic = pickle.load(f)
 
-    with open('data/audio_embeddings.pickle', 'rb') as f:
+    with open(aud_embeddings_path, 'rb') as f:
         aud_feat_dic = pickle.load(f)
 
     return img_feat_dic, aud_feat_dic
@@ -207,8 +209,9 @@ def _generate_VFF_data_for_labels(img_vecs, img_labels, aud_vecs, aud_labels, la
     return X, y
 
 
-def _create_triplets():
-    img_vecs, img_labels, aud_vecs, aud_labels, num_labels = load_data()
+def create_triplets(img_embeddings_path='data/image_embeddings.pickle',
+                    aud_embeddings_path='data/audio_embeddings.pickle'):
+    img_vecs, img_labels, aud_vecs, aud_labels, num_labels = load_data(img_embeddings_path, aud_embeddings_path)
     labels = np.unique(aud_labels)
     X, y = _generate_VFF_data_for_labels(img_vecs, img_labels, aud_vecs, aud_labels, labels, concat=False)
 
@@ -219,15 +222,16 @@ def _create_triplets():
         pickle.dump(y, f, protocol=HIGHEST_PROTOCOL)
 
 
-def _create_pairs():
-    img_vecs, img_labels, aud_vecs, aud_labels, num_labels = load_data()
+def create_pairs(img_embeddings_path='data/image_embeddings.pickle',
+                 aud_embeddings_path='data/audio_embeddings.pickle'):
+    img_vecs, img_labels, aud_vecs, aud_labels, num_labels = load_data(img_embeddings_path, aud_embeddings_path)
     labels = np.unique(aud_labels)
     X, y = _generate_matching_data_for_labels(img_vecs, img_labels, aud_vecs, aud_labels, labels, concat=False)
 
-    with open('data/triplets.pickle', 'wb') as f:
+    with open('data/pairs.pickle', 'wb') as f:
         pickle.dump(X, f, protocol=HIGHEST_PROTOCOL)
 
-    with open('data/triplets_y.pickle', 'wb') as f:
+    with open('data/pairs_y.pickle', 'wb') as f:
         pickle.dump(y, f, protocol=HIGHEST_PROTOCOL)
 
 

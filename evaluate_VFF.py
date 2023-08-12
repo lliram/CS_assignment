@@ -57,13 +57,13 @@ def load_triplets_evaluate(triplet_file_name, y_file_name):
 
     evaluate_accuracy_for_embeddings(triplets, y)
 
-def _test():
-    from preprocssing import _create_triplets
-    _create_triplets()
+def main():
+    from preprocssing import create_triplets
+    create_triplets() #provide path to pickle files (otherwise will use provided input data)
     path = os.path.dirname(os.path.abspath(__file__))  + '/'
     load_triplets_evaluate(path + 'data/triplets.pickle', path + 'data/triplets_y.pickle')
 
 
 
 if __name__ == '__main__':
-    _test()
+    main()
